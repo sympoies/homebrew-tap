@@ -1,16 +1,16 @@
-# graysurf Homebrew tap
+# sympoies Homebrew tap
 
 ## Formula overview
 
 | Formula | Description | Source git repo |
 | --- | --- | --- |
-| `nils-cli` | Rust workspace of focused CLI binaries for Git operations, API test orchestration, and workflow automation. | [graysurf/nils-cli](https://github.com/graysurf/nils-cli) |
+| `nils-cli` | Rust workspace of focused CLI binaries for Git operations, API test orchestration, and workflow automation. | [sympoies/nils-cli](https://github.com/sympoies/nils-cli) |
 | `agent-workspace-launcher` | Host-native workspace lifecycle CLI for repository-focused development. | [graysurf/agent-workspace-launcher](https://github.com/graysurf/agent-workspace-launcher) |
 
 ## nils-cli
 
 A Rust workspace of focused CLI binaries for Git operations, API test orchestration, and workflow automation.
-Source git repo: [graysurf/nils-cli](https://github.com/graysurf/nils-cli)
+Source git repo: [sympoies/nils-cli](https://github.com/sympoies/nils-cli)
 
 ### Included CLIs
 
@@ -49,7 +49,7 @@ Source git repo: [graysurf/nils-cli](https://github.com/graysurf/nils-cli)
 ## Install
 
 ```bash
-brew tap graysurf/tap
+brew tap sympoies/tap
 brew install nils-cli
 ```
 
@@ -71,7 +71,7 @@ Main subcommands:
 Install:
 
 ```bash
-brew tap graysurf/tap
+brew tap sympoies/tap
 brew install agent-workspace-launcher
 ```
 
@@ -136,7 +136,7 @@ bash scripts/install.sh
 One-liner (review before running):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/graysurf/homebrew-tap/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/sympoies/homebrew-tap/main/scripts/install.sh | bash
 ```
 
 ## Upgrade

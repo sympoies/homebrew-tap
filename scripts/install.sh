@@ -44,7 +44,7 @@ ensure_brew
 
 echo "Detected OS: $OS ($ARCH)"
 
-brew tap graysurf/tap
+brew tap sympoies/tap
 brew install nils-cli
 
 echo "Install complete. Try: nils-cli --help"
