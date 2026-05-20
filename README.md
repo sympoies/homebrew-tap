@@ -4,53 +4,138 @@
 
 | Formula | Description | Source git repo |
 | --- | --- | --- |
-| `nils-cli` | Rust workspace of focused CLI binaries for Git operations, API test orchestration, and workflow automation. | [sympoies/nils-cli](https://github.com/sympoies/nils-cli) |
+| `nils-cli` | Rust workspace of focused CLI binaries for API testing, Git operations, agent workflow evidence, provider automation, planning, and desktop/media utilities. | [sympoies/nils-cli](https://github.com/sympoies/nils-cli) |
 | `agent-workspace-launcher` | Host-native workspace lifecycle CLI for repository-focused development. | [graysurf/agent-workspace-launcher](https://github.com/graysurf/agent-workspace-launcher) |
 
 ## nils-cli
 
-A Rust workspace of focused CLI binaries for Git operations, API test orchestration, and workflow automation.
+A Rust workspace of focused CLI binaries. Each binary is independently installable from a single Homebrew formula — shared crates keep JSON contracts, terminal UX, and cross-CLI behavior consistent.
+
 Source git repo: [sympoies/nils-cli](https://github.com/sympoies/nils-cli)
 
-### Included CLIs
-
-#### API testing stack
-
-- `api-rest`: REST request runner from file-based JSON specs, with history + Markdown reports.
-- `api-gql`: GraphQL operation runner for `.graphql` files (variables, history, reports, schema).
-- `api-grpc`: gRPC request runner from JSON specs, with history + Markdown reports.
-- `api-websocket`: Deterministic WebSocket request runner with history + Markdown reports.
-- `api-test`: Suite runner that orchestrates REST/GraphQL/gRPC/WebSocket cases and outputs JSON (and optional JUnit).
-
-#### Git tooling
-
-- `git-scope`: Git change inspector (tracked/staged/unstaged/untracked/commit) with tree + optional file printing.
-- `git-cli`: Git tools dispatcher (utils/reset/commit/branch/ci/open).
-- `git-summary`: Per-author contribution summaries over a date range (adds/dels/net/commits).
-- `git-lock`: Label-based commit locks per repo (lock/list/diff/unlock/tag).
-
-#### Agent and workflow tooling
-
-- `agent-docs`: Deterministic policy-document resolver for agent workflows (`resolve`, `contexts`, `add`, `baseline`).
-- `codex-cli`: Provider-specific CLI for OpenAI/Codex workflows (auth, diagnostics, execution wrappers, Starship).
-- `gemini-cli`: Provider-specific CLI lane for Gemini workflows.
-- `semantic-commit`: Helper CLI for generating staged context and creating semantic commits.
-- `plan-tooling`: Plan Format v1 tooling CLI (`to-json`, `validate`, `batches`, `split-prs`, `scaffold`, `completion`).
-- `plan-issue`, `plan-issue-local`: Plan issue orchestration CLIs for build/start/status/ready/accept/close workflows plus completion export.
-
-#### Automation and utility CLIs
-
-- `macos-agent`: macOS desktop automation primitives for app/window discovery, input actions, screenshot, and wait helpers.
-- `fzf-cli`: Interactive `fzf` toolbox for files, Git, processes, ports, and shell history.
-- `memo-cli`: Capture-first memo workflow CLI with agent enrichment loop (`add`, `list`, `search`, `report`, `fetch`, `apply`).
-- `image-processing`: Batch image transformation CLI (resize/crop/optimize) with JSON/report outputs.
-- `screen-record`: macOS ScreenCaptureKit + Linux (X11) recorder for a single window or display with optional audio.
-
-## Install
+### Install
 
 ```bash
 brew tap sympoies/tap
 brew install nils-cli
+```
+
+### CLI surface map
+
+Mirrors the upstream surface map. Use this table to choose the right binary; every entry below is shipped by the formula and installed onto `PATH`.
+
+| Area | Binaries | Use when |
+| --- | --- | --- |
+| API testing | `api-rest`, `api-gql`, `api-grpc`, `api-websocket`, `api-test` | Run protocol-specific API checks or orchestrate a mixed API test suite. |
+| Git tooling | `git-scope`, `git-cli`, `git-summary`, `git-lock` | Inspect changes, run Git helper flows, summarize commits, or manage repo-local commit locks. |
+| Forge automation | `forge-cli` | Drive PR/MR + Issue lifecycle on GitHub (`gh`) or GitLab (`glab`) through a single provider-neutral surface — create / view / edit / comment / ready / merge / close, CI wait-checks, and the `pr deliver` macro. |
+| Agent policy and evidence | `agent-docs`, `agent-out`, `agent-scope-lock`, `test-first-evidence`, `web-evidence`, `browser-session`, `canary-check`, `docs-impact`, `heuristic-inbox`, `model-cross-check`, `repo-retro`, `review-evidence`, `skill-usage` | Resolve agent policy docs, allocate artifact paths, enforce edit scope, persist deterministic workflow evidence, or generate repo retrospectives. |
+| Planning and delivery | `plan-tooling`, `plan-issue`, `plan-issue-local`, `semantic-commit` | Validate/split implementation plans, orchestrate plan-issue delivery, rehearse local plan flows, or create semantic commits. |
+| Provider lanes | `codex-cli`, `gemini-cli` | Provider-specific diagnostics, auth checks, and workflow adapters. |
+| Desktop, media, and local utilities | `macos-agent`, `screen-record`, `image-processing`, `fzf-cli`, `memo-cli` | Automate local desktop tasks, capture media, batch-convert images, use interactive shell helpers, or record/search local memos. |
+| Development-only / internal | `cli-template`, `agent-runtime` | Internal scaffolding and in-progress lanes — excluded from user-facing completion obligations. |
+
+### Per-binary one-liners
+
+#### API testing stack
+
+- `api-rest` — REST request runner from JSON request specs, with history + Markdown reports.
+- `api-gql` — GraphQL operation runner for `.graphql` files (variables, history, reports, schema).
+- `api-grpc` — gRPC request runner from JSON specs, with history + Markdown reports.
+- `api-websocket` — Deterministic WebSocket request runner with history + Markdown reports.
+- `api-test` — Suite runner that orchestrates REST/GraphQL/gRPC/WebSocket cases and emits JSON (and optional JUnit).
+
+#### Git tooling
+
+- `git-scope` — Git change inspector (tracked/staged/unstaged/untracked/commit) with tree + optional file printing.
+- `git-cli` — Git tools dispatcher (utils/reset/commit/branch/ci/open).
+- `git-summary` — Per-author contribution summaries over a date range (adds/dels/net/commits).
+- `git-lock` — Label-based commit locks per repo (lock/list/diff/unlock/tag).
+
+#### Forge automation
+
+- `forge-cli` — Provider-neutral CLI for remote forge operations; wraps `gh` and `glab` behind one PR/MR + Issue surface.
+
+#### Agent policy and evidence
+
+- `agent-docs` — Deterministic policy-document resolver for agent workflows (`resolve`, `contexts`, `add`, `baseline`).
+- `agent-out` — Generate and audit canonical `AGENT_HOME/out` artifact paths.
+- `agent-scope-lock` — Create and validate deterministic agent edit-scope locks.
+- `test-first-evidence` — Record test-first evidence and waivers for agent workflows.
+- `web-evidence` — Capture redacted static HTTP evidence for agent workflows.
+- `browser-session` — Record browser QA goals, steps, artifacts, and verification status.
+- `canary-check` — Run a local command as a canary and persist redacted run evidence.
+- `docs-impact` — Scan Git changes and classify whether implementation work needs documentation updates.
+- `heuristic-inbox` — Manage curated HEURISTIC_SYSTEM error-inbox and operation-record case folders.
+- `model-cross-check` — Persist primary/checker model observations and verification status without invoking providers.
+- `repo-retro` — Generate source-grounded repository retrospectives from Git history and optional evidence inputs.
+- `review-evidence` — Persist review findings, validation commands, artifacts, and verification status.
+- `skill-usage` — Record skill invocation intent, linked evidence, validation, failures, and outcome.
+
+#### Planning and delivery
+
+- `plan-tooling` — Plan Format v1 tooling (`to-json`, `validate`, `batches`, `split-prs`, `scaffold`, `completion`).
+- `plan-issue`, `plan-issue-local` — Plan-issue orchestration for build/start/status/ready/accept/close workflows plus completion export.
+- `semantic-commit` — Helper CLI for generating staged context and creating semantic commits.
+
+#### Provider lanes
+
+- `codex-cli` — Provider-specific CLI for OpenAI / Codex workflows (auth, diagnostics, execution wrappers, Starship).
+- `gemini-cli` — Provider-specific CLI lane for Gemini workflows.
+
+#### Desktop, media, and local utilities
+
+- `macos-agent` — macOS desktop automation primitives (app/window discovery, input actions, screenshot, wait helpers).
+- `screen-record` — macOS ScreenCaptureKit + Linux (X11) recorder for a single window or display with optional audio.
+- `image-processing` — Batch image transformation (resize/crop/optimize) with JSON / Markdown reports.
+- `fzf-cli` — Interactive `fzf` toolbox for files, Git, processes, ports, and shell history.
+- `memo-cli` — Capture-first memo workflow with agent enrichment loop (`add`, `list`, `search`, `report`, `fetch`, `apply`).
+
+#### Development-only / internal
+
+- `cli-template` — Minimal example CLI used to validate packaging and new-crate patterns.
+- `agent-runtime` — Stub lane for graysurf/agent-runtime-kit (Plan 01 stub — subcommands exit non-zero until Plan 02 lands).
+
+### Shell completions and aliases
+
+The formula installs Zsh and Bash completion files for every CLI listed above, plus an opt-in aliases file for each shell.
+
+#### Zsh
+
+Completions are dropped into `$(brew --prefix)/share/zsh/site-functions/` and load automatically once `compinit` runs. To opt into the aliases file (`gs*` / `cx* `/ `fx*` shortcuts), add this to `~/.zshrc`:
+
+```bash
+# nils-cli aliases (optional)
+if [[ -f "$(brew --prefix nils-cli)/share/zsh/site-functions/aliases.zsh" ]]; then
+  source "$(brew --prefix nils-cli)/share/zsh/site-functions/aliases.zsh"
+fi
+```
+
+#### Bash
+
+1) Enable Homebrew bash-completion (macOS / Linuxbrew):
+
+```bash
+brew install bash-completion@2
+```
+
+Then add this to your `~/.bashrc` (or `~/.bash_profile`):
+
+```bash
+# Homebrew bash completion
+if command -v brew >/dev/null 2>&1; then
+  BREW_PREFIX="$(brew --prefix)"
+  [[ -r "${BREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && . "${BREW_PREFIX}/etc/profile.d/bash_completion.sh"
+fi
+```
+
+2) (Optional) Enable the `nils-cli` Bash aliases:
+
+```bash
+# nils-cli aliases (optional)
+if [[ -f "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash" ]]; then
+  source "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash"
+fi
 ```
 
 ## agent-workspace-launcher
@@ -81,49 +166,7 @@ Optional zsh wrapper source:
 source "$(brew --prefix agent-workspace-launcher)/share/agent-workspace-launcher/awl.zsh"
 ```
 
-## Zsh aliases (optional)
-
-`nils-cli` ships an opt-in Zsh aliases file (designed to avoid clobbering user-defined aliases/functions).
-
-After `brew install nils-cli`, add this to your `~/.zshrc`:
-
-```bash
-# nils-cli aliases (optional)
-if [[ -f "$(brew --prefix nils-cli)/share/zsh/site-functions/aliases.zsh" ]]; then
-  source "$(brew --prefix nils-cli)/share/zsh/site-functions/aliases.zsh"
-fi
-```
-
-## Bash completion + aliases (optional)
-
-`nils-cli` ships Bash completion scripts for each CLI, plus an opt-in Bash aliases file (for `gs*`/`cx*`/`fx*`).
-
-1) Enable Homebrew bash-completion (macOS/Linuxbrew):
-
-```bash
-brew install bash-completion@2
-```
-
-Then add this to your `~/.bashrc` (or `~/.bash_profile`, depending on your setup):
-
-```bash
-# Homebrew bash completion
-if command -v brew >/dev/null 2>&1; then
-  BREW_PREFIX="$(brew --prefix)"
-  [[ -r "${BREW_PREFIX}/etc/profile.d/bash_completion.sh" ]] && . "${BREW_PREFIX}/etc/profile.d/bash_completion.sh"
-fi
-```
-
-2) (Optional) Enable `nils-cli` Bash aliases:
-
-```bash
-# nils-cli aliases (optional)
-if [[ -f "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash" ]]; then
-  source "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash"
-fi
-```
-
-## Install (Script)
+## Install (script)
 
 The install script supports macOS and Linux. It will install Homebrew (Linuxbrew on Linux) if missing.
 
