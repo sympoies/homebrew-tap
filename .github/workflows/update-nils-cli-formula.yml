@@ -119,10 +119,12 @@ jobs:
           ruby -c Formula/nils-cli.rb
           brew style Formula/nils-cli.rb
 
-      - name: Register local tap
+      - name: Link local tap
         run: |
-          brew untap sympoies/tap || true
-          brew tap sympoies/tap "${GITHUB_WORKSPACE}"
+          tap_dir="$(brew --repository)/Library/Taps/sympoies/homebrew-tap"
+          rm -rf "${tap_dir}"
+          mkdir -p "$(dirname "${tap_dir}")"
+          ln -s "${GITHUB_WORKSPACE}" "${tap_dir}"
 
       - name: Install formula
         run: brew install sympoies/tap/nils-cli
