@@ -119,11 +119,14 @@ jobs:
           ruby -c Formula/nils-cli.rb
           brew style Formula/nils-cli.rb
 
+      - name: Register local tap
+        run: brew tap sympoies/tap "${GITHUB_WORKSPACE}"
+
       - name: Install formula
-        run: brew install Formula/nils-cli.rb
+        run: brew install sympoies/tap/nils-cli
 
       - name: Test formula
-        run: brew test nils-cli
+        run: brew test sympoies/tap/nils-cli
 
   commit:
     name: Commit formula update
