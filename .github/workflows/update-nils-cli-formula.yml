@@ -120,7 +120,9 @@ jobs:
           brew style Formula/nils-cli.rb
 
       - name: Register local tap
-        run: brew tap sympoies/tap "${GITHUB_WORKSPACE}"
+        run: |
+          brew untap sympoies/tap || true
+          brew tap sympoies/tap "${GITHUB_WORKSPACE}"
 
       - name: Install formula
         run: brew install sympoies/tap/nils-cli
