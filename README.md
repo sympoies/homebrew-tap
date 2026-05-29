@@ -22,18 +22,18 @@ brew install nils-cli
 
 ### CLI surface map
 
-Mirrors the upstream surface map. Use this table to choose the right binary; every entry below is shipped by the formula and installed onto `PATH`.
+Aligned with the upstream surface map, limited to the binaries this formula ships. Use this table to choose the right binary; every entry below is shipped by the formula and installed onto `PATH`.
 
 | Area | Binaries | Use when |
 | --- | --- | --- |
 | API testing | `api-rest`, `api-gql`, `api-grpc`, `api-websocket`, `api-test` | Run protocol-specific API checks or orchestrate a mixed API test suite. |
 | Git tooling | `git-scope`, `git-cli`, `git-summary`, `git-lock` | Inspect changes, run Git helper flows, summarize commits, or manage repo-local commit locks. |
-| Forge automation | `forge-cli` | Drive PR/MR + Issue lifecycle on GitHub (`gh`) or GitLab (`glab`) through a single provider-neutral surface — create / view / edit / comment / ready / merge / close, CI wait-checks, and the `pr deliver` macro. |
-| Agent policy and evidence | `agent-docs`, `agent-out`, `agent-scope-lock`, `test-first-evidence`, `web-evidence`, `browser-session`, `canary-check`, `docs-impact`, `heuristic-inbox`, `model-cross-check`, `repo-retro`, `review-evidence`, `skill-usage` | Resolve agent policy docs, allocate artifact paths, enforce edit scope, persist deterministic workflow evidence, or generate repo retrospectives. |
-| Planning and delivery | `plan-tooling`, `plan-issue`, `plan-issue-local`, `semantic-commit` | Validate/split implementation plans, orchestrate plan-issue delivery, rehearse local plan flows, or create semantic commits. |
+| Forge automation | `forge-cli` | Drive PR/MR + Issue lifecycle and repository label catalog maintenance on GitHub (`gh`) or GitLab (`glab`) through a single provider-neutral surface — create / view / edit / comment / ready / merge / close, label list / audit / ensure, CI wait-checks, and the `pr deliver` macro. |
+| Agent policy and evidence | `agent-runtime`, `agent-docs`, `agent-out`, `agent-scope-lock`, `agent-run`, `test-first-evidence`, `web-evidence`, `browser-session`, `canary-check`, `docs-impact`, `heuristic-inbox`, `model-cross-check`, `repo-retro`, `review-evidence`, `review-specialists`, `skill-usage` | Render/install/audit runtime-kit surfaces, resolve agent policy docs, run project commands through explicit env handling, allocate artifact paths, enforce edit scope, generate repo retrospectives, merge specialist review evidence, or persist deterministic workflow evidence. |
+| Planning and delivery | `plan-tooling`, `plan-issue`, `plan-issue-local`, `plan-archive`, `semantic-commit` | Validate/split implementation plans, orchestrate issue delivery, rehearse local plan flows, archive closed plan folders, or create semantic commits. |
 | Provider lanes | `codex-cli`, `gemini-cli` | Provider-specific diagnostics, auth checks, and workflow adapters. |
 | Desktop, media, and local utilities | `macos-agent`, `screen-record`, `image-processing`, `fzf-cli`, `memo-cli` | Automate local desktop tasks, capture media, batch-convert images, use interactive shell helpers, or record/search local memos. |
-| Development-only / internal | `cli-template`, `agent-runtime` | Internal scaffolding and in-progress lanes — excluded from user-facing completion obligations. |
+| Development-only / internal | `cli-template` | Internal scaffolding to validate packaging and new-crate patterns — excluded from user-facing completion obligations. |
 
 ### Per-binary one-liners
 
@@ -54,13 +54,15 @@ Mirrors the upstream surface map. Use this table to choose the right binary; eve
 
 #### Forge automation
 
-- `forge-cli` — Provider-neutral CLI for remote forge operations; wraps `gh` and `glab` behind one PR/MR + Issue surface.
+- `forge-cli` — Provider-neutral CLI for remote forge operations; wraps `gh` and `glab` behind one PR/MR + Issue lifecycle and repository label catalog surface.
 
 #### Agent policy and evidence
 
+- `agent-runtime` — Render / install / doctor / audit-drift for graysurf/agent-runtime-kit, plus runtime-state maintenance, skill listing, and PR/MR body rendering.
 - `agent-docs` — Deterministic policy-document resolver for agent workflows (`resolve`, `contexts`, `add`, `baseline`).
 - `agent-out` — Generate and audit canonical `AGENT_HOME/out` artifact paths.
 - `agent-scope-lock` — Create and validate deterministic agent edit-scope locks.
+- `agent-run` — Run project build/test/validation commands through a normalized, direnv-aware project environment (`exec`, `doctor`, `env`).
 - `test-first-evidence` — Record test-first evidence and waivers for agent workflows.
 - `web-evidence` — Capture redacted static HTTP evidence for agent workflows.
 - `browser-session` — Record browser QA goals, steps, artifacts, and verification status.
@@ -70,12 +72,14 @@ Mirrors the upstream surface map. Use this table to choose the right binary; eve
 - `model-cross-check` — Persist primary/checker model observations and verification status without invoking providers.
 - `repo-retro` — Generate source-grounded repository retrospectives from Git history and optional evidence inputs.
 - `review-evidence` — Persist review findings, validation commands, artifacts, and verification status.
+- `review-specialists` — Deterministic primitive for code-review-specialists workflows (`validate`, `merge`, `render`, `bundle`, `scope`); never runs reviewers or posts comments.
 - `skill-usage` — Record skill invocation intent, linked evidence, validation, failures, and outcome.
 
 #### Planning and delivery
 
 - `plan-tooling` — Plan Format v1 tooling (`to-json`, `validate`, `batches`, `split-prs`, `scaffold`, `completion`).
 - `plan-issue`, `plan-issue-local` — Plan-issue orchestration for build/start/status/ready/accept/close workflows plus completion export.
+- `plan-archive` — Migrate closed plan folders into the agent-plan-archive repo and scan/validate candidates (`discover`, `migrate`, `refresh`, `validate-*`); dry-run by default.
 - `semantic-commit` — Helper CLI for generating staged context and creating semantic commits.
 
 #### Provider lanes
@@ -94,7 +98,6 @@ Mirrors the upstream surface map. Use this table to choose the right binary; eve
 #### Development-only / internal
 
 - `cli-template` — Minimal example CLI used to validate packaging and new-crate patterns.
-- `agent-runtime` — Stub lane for graysurf/agent-runtime-kit (Plan 01 stub — subcommands exit non-zero until Plan 02 lands).
 
 ### Shell completions and aliases
 
