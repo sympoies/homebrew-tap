@@ -1,0 +1,7 @@
+# Repo-local agent-docs catalog for the nils-cli Homebrew tap.
+#
+# Opt in to the project-local skill-name prefix lint (agent-docs v1.0+):
+# `agent-docs audit` flags any `.agents/skills/<name>` directory whose name is
+# not lowercase kebab-case starting with `project-` or `private-`.
+[skills]
+enforce_name_prefix = true
