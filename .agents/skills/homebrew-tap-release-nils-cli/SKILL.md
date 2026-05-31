@@ -1,63 +1,58 @@
 ---
 name: homebrew-tap-release-nils-cli
-description: Release Homebrew formula nils-cli using shared bump script.
+description: Release Homebrew formula nils-cli by dispatching the tap's GitHub Actions release workflow.
 ---
 
 # Homebrew Tap Release Nils Cli
+
+Manually publish a `nils-cli` version to this Homebrew tap by dispatching the
+release workflow `.github/workflows/update-nils-cli-formula.yml`.
+
+> The normal release path is automatic: the `nils-cli` release pipeline sends a
+> `repository_dispatch` (`nils-cli-release`) to this tap, which runs the same
+> workflow. Use this skill only to manually (re)publish a specific version — for
+> example a backfill, or a re-run after a transient failure.
 
 ## Contract
 
 Prereqs:
 
-- Run inside this `homebrew-tap` git work tree.
-- `gh`, `python3`, `git`, `brew`, and `semantic-commit` available on `PATH`.
-- Push permission to tap remote and source repo release visibility.
-- Shared bump script exists at:
-  `.agents/skills/_shared/homebrew-tap-release/homebrew-tap-bump-formula.sh`
+- Run inside this `homebrew-tap` git work tree (`gh` resolves the repo from the
+  remote).
+- `gh` available on `PATH` and authenticated with Actions (workflow) write scope.
 
 Inputs:
 
 - Required:
-  - `--version <vX.Y.Z|X.Y.Z>` or `--latest`
-- Optional (forwarded to shared script):
-  - `--wait-release-timeout <seconds>`
-  - `--wait-release-interval <seconds>`
-  - `--assume-no-release-ci`
-  - `--no-wait-release`
-  - `--dry-run`
-  - `--no-ruby-check`
-  - `--no-style`
-  - `--no-commit`
-  - `--no-push`
-  - `--no-tap-tag`
-  - `--tap-tag <tag>`
-  - `--tap-tag-prefix <pfx>`
-  - `--remote <name>`
-- Disallowed overrides (this skill locks target package/workflow):
-  - `--package`
-  - `--repo`
-  - `--formula`
-  - `--asset-prefix`
-  - `--release-workflow`
+  - `--version <X.Y.Z|vX.Y.Z>` — `nils-cli` version to publish (leading `v`
+    optional).
+- Optional:
+  - `--source-repo <OWNER/REPO>` — source repo holding the release artifacts
+    (default: workflow default, `sympoies/nils-cli`).
+  - `--ref <ref>` — branch/ref to run the workflow on (default: `main`).
+  - `--watch` — stream the dispatched run to completion after triggering.
+  - `--dry-run` — print the `gh` command without dispatching.
 
 Outputs:
 
-- Bumps only `Formula/nils-cli.rb` to the target source release.
-- Wrapper fixes release workflow to `release.yml`.
-- Commits/pushes/tagging behavior follows forwarded flags from shared script.
-- Post-publish performs `brew update && brew upgrade nils-cli` unless push is disabled.
+- Dispatches `update-nils-cli-formula.yml`, which rewrites `Formula/nils-cli.rb`
+  from the published release artifacts, runs `brew test` on macOS + Linux,
+  commits the bump via the GitHub Contents API (web-flow signed, satisfying the
+  `required_signatures` ruleset on `main`), and creates the `nils-cli-v<version>`
+  tap release.
 
 Exit codes:
 
 - `0`: success
-- `1`: failure
-- `2`: usage error
+- `1`: failure (missing `gh`, run outside the tap work tree, or dispatch failure)
+- `2`: usage error (missing/invalid `--version` or `--source-repo`)
 
 Failure modes:
 
-- Missing prerequisites or missing shared script.
-- Shared script validation failure (tag not found, release assets not ready, formula format mismatch, push/tag failure).
-- User passes locked arguments (`--package`, `--repo`, `--formula`, `--asset-prefix`, `--release-workflow`).
+- Missing `gh`, or running outside the tap work tree.
+- Invalid `--version` / `--source-repo`.
+- Source release artifacts not yet published — the dispatched workflow fails
+  while fetching the `.sha256` sidecars; re-run once the release is ready.
 
 ## Scripts (only entrypoints)
 
@@ -65,7 +60,9 @@ Failure modes:
 
 ## Workflow
 
-1. Run wrapper skill entrypoint with `--version` or `--latest`.
-2. Wrapper forwards supported options to shared script and injects:
-   `--package nils-cli --repo graysurf/nils-cli --formula Formula/nils-cli.rb --release-workflow release.yml`.
-3. Shared script performs release readiness checks, formula update, commit/push/tag, and local upgrade.
+1. Run the wrapper entrypoint with `--version` (optionally `--source-repo`,
+   `--ref`, `--watch`).
+2. The wrapper runs `gh workflow run update-nils-cli-formula.yml --ref <ref>
+   -f version=<X.Y.Z> [-f source_repo=<OWNER/REPO>]`.
+3. GitHub Actions updates the formula, runs `brew test`, commits the bump, and
+   publishes the tap release.

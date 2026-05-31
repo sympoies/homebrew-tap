@@ -4,7 +4,6 @@ set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 skill_root="$(cd "${script_dir}/.." && pwd)"
 entrypoint="${skill_root}/scripts/homebrew-tap-release-nils-cli.sh"
-shared_script="${skill_root}/../_shared/homebrew-tap-release/homebrew-tap-bump-formula.sh"
 
 if [[ ! -f "${skill_root}/SKILL.md" ]]; then
   echo "error: missing SKILL.md" >&2
@@ -18,23 +17,40 @@ if [[ ! -x "$entrypoint" ]]; then
   echo "error: entrypoint is not executable: $entrypoint" >&2
   exit 1
 fi
-if [[ ! -x "$shared_script" ]]; then
-  echo "error: shared script missing or not executable: $shared_script" >&2
-  exit 1
-fi
 
+# Help references the dispatch workflow.
 help_out="$(bash "$entrypoint" --help)"
-if [[ "$help_out" != *"Release \`nils-cli\` via the shared bump script."* ]]; then
-  echo "error: help output missing nils-cli description" >&2
+if [[ "$help_out" != *"update-nils-cli-formula.yml"* ]]; then
+  echo "error: help output missing workflow reference" >&2
   exit 1
 fi
 
+# Missing --version is a usage error (exit 2).
 set +e
-bash "$entrypoint" --package other >/dev/null 2>&1
+bash "$entrypoint" >/dev/null 2>&1
 status=$?
 set -e
 if [[ "$status" -ne 2 ]]; then
-  echo "error: expected locked --package to fail with exit 2; got $status" >&2
+  echo "error: expected missing --version to fail with exit 2; got $status" >&2
+  exit 1
+fi
+
+# Invalid --version is a usage error (exit 2).
+set +e
+bash "$entrypoint" --version not-a-version >/dev/null 2>&1
+status=$?
+set -e
+if [[ "$status" -ne 2 ]]; then
+  echo "error: expected invalid --version to fail with exit 2; got $status" >&2
+  exit 1
+fi
+
+# Dry-run prints the gh command without dispatching.
+dry_out="$(bash "$entrypoint" --version v9.9.9 --dry-run)"
+if [[ "$dry_out" != *"gh workflow run"* \
+   || "$dry_out" != *"update-nils-cli-formula.yml"* \
+   || "$dry_out" != *"version=9.9.9"* ]]; then
+  echo "error: dry-run output missing expected gh command: $dry_out" >&2
   exit 1
 fi
 
