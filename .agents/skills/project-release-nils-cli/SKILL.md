@@ -1,5 +1,5 @@
 ---
-name: homebrew-tap-release-nils-cli
+name: project-release-nils-cli
 description: Release Homebrew formula nils-cli by dispatching the tap's GitHub Actions release workflow.
 ---
 
@@ -56,7 +56,7 @@ Failure modes:
 
 ## Scripts (only entrypoints)
 
-- `<PROJECT_ROOT>/.agents/skills/homebrew-tap-release-nils-cli/scripts/homebrew-tap-release-nils-cli.sh`
+- `<PROJECT_ROOT>/.agents/skills/project-release-nils-cli/scripts/project-release-nils-cli.sh`
 
 ## Workflow
 
