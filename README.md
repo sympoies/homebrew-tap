@@ -5,7 +5,6 @@
 | Formula | Description | Source git repo |
 | --- | --- | --- |
 | `nils-cli` | Rust workspace of focused CLI binaries for API testing, Git operations, agent workflow evidence, provider automation, planning, and desktop/media utilities. | [sympoies/nils-cli](https://github.com/sympoies/nils-cli) |
-| `agent-workspace-launcher` | Host-native workspace lifecycle CLI for repository-focused development. | [graysurf/agent-workspace-launcher](https://github.com/graysurf/agent-workspace-launcher) |
 
 ## nils-cli
 
@@ -141,34 +140,6 @@ if [[ -f "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash" ]]; then
 fi
 ```
 
-## agent-workspace-launcher
-
-Host-native workspace lifecycle CLI for repository-focused development.
-Source git repo: [graysurf/agent-workspace-launcher](https://github.com/graysurf/agent-workspace-launcher)
-
-Main subcommands:
-
-- `auth`
-- `create`
-- `ls`
-- `rm`
-- `exec`
-- `reset`
-- `tunnel`
-
-Install:
-
-```bash
-brew tap sympoies/tap
-brew install agent-workspace-launcher
-```
-
-Optional zsh wrapper source:
-
-```bash
-source "$(brew --prefix agent-workspace-launcher)/share/agent-workspace-launcher/awl.zsh"
-```
-
 ## Install (script)
 
 The install script supports macOS and Linux. It will install Homebrew (Linuxbrew on Linux) if missing.
@@ -189,7 +160,6 @@ curl -fsSL https://raw.githubusercontent.com/sympoies/homebrew-tap/main/scripts/
 
 ```bash
 brew upgrade nils-cli
-brew upgrade agent-workspace-launcher
 ```
 
 ## CI
