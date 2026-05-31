@@ -9,6 +9,9 @@ command -v brew >/dev/null 2>&1
 brew tap sympoies/tap
 ```
 
+- Optional direnv helper: `.envrc` creates `.venv` with `uv venv` for local
+  Python helper isolation. It does not change Homebrew formula validation.
+
 ## Build
 
 Validate formula structure and style:
