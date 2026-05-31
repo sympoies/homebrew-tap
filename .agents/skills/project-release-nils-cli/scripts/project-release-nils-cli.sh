@@ -6,7 +6,7 @@ WORKFLOW="update-nils-cli-formula.yml"
 usage() {
   cat <<'USAGE'
 Usage:
-  homebrew-tap-release-nils-cli.sh --version <X.Y.Z|vX.Y.Z> [options]
+  project-release-nils-cli.sh --version <X.Y.Z|vX.Y.Z> [options]
 
 Release `nils-cli` by dispatching this tap's GitHub Actions release workflow
 (.github/workflows/update-nils-cli-formula.yml). The workflow rewrites

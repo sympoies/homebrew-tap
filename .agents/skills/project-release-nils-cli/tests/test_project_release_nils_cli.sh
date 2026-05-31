@@ -3,14 +3,14 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 skill_root="$(cd "${script_dir}/.." && pwd)"
-entrypoint="${skill_root}/scripts/homebrew-tap-release-nils-cli.sh"
+entrypoint="${skill_root}/scripts/project-release-nils-cli.sh"
 
 if [[ ! -f "${skill_root}/SKILL.md" ]]; then
   echo "error: missing SKILL.md" >&2
   exit 1
 fi
 if [[ ! -f "$entrypoint" ]]; then
-  echo "error: missing scripts/homebrew-tap-release-nils-cli.sh" >&2
+  echo "error: missing scripts/project-release-nils-cli.sh" >&2
   exit 1
 fi
 if [[ ! -x "$entrypoint" ]]; then
