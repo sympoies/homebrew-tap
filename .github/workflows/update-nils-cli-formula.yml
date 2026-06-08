@@ -126,6 +126,10 @@ jobs:
           mkdir -p "$(dirname "${tap_dir}")"
           ln -s "${GITHUB_WORKSPACE}" "${tap_dir}"
 
+      - name: Configure Linux Homebrew sandbox
+        if: runner.os == 'Linux'
+        run: echo "HOMEBREW_NO_SANDBOX_LINUX=1" >>"${GITHUB_ENV}"
+
       - name: Install formula
         run: brew install sympoies/tap/nils-cli
 
