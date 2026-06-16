@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "nils-cli-v*"
+      - "nils-alfred-cli-v*"
 
 jobs:
   detect-formula:
@@ -25,6 +26,8 @@ jobs:
 
           if [[ "$tag" == nils-cli-v* ]]; then
             formula="nils-cli"
+          elif [[ "$tag" == nils-alfred-cli-v* ]]; then
+            formula="nils-alfred-cli"
           else
             echo "error: unsupported release tag pattern: $tag" >&2
             exit 1

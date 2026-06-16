@@ -23,6 +23,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@75ea84e0c056f44fbc237368be867593cd459107
+      - name: Trust tap
+        run: brew trust sympoies/tap
       - name: Configure Linux Homebrew sandbox
         if: runner.os == 'Linux'
         run: echo "HOMEBREW_NO_SANDBOX_LINUX=1" >>"${GITHUB_ENV}"

@@ -5,6 +5,7 @@
 | Formula | Description | Source git repo |
 | --- | --- | --- |
 | `nils-cli` | Rust workspace of focused CLI binaries for API testing, Git operations, agent workflow evidence, provider automation, planning, and desktop/media utilities. | [sympoies/nils-cli](https://github.com/sympoies/nils-cli) |
+| `nils-alfred-cli` | Standalone CLI bundle extracted from nils-alfredworkflow for terminal use without Alfred. | [sympoies/nils-alfredworkflow](https://github.com/sympoies/nils-alfredworkflow) |
 
 ## nils-cli
 
@@ -139,6 +140,32 @@ if [[ -f "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash" ]]; then
   source "$(brew --prefix nils-cli)/share/nils-cli/aliases.bash"
 fi
 ```
+
+## nils-alfred-cli
+
+`nils-alfred-cli` is generated from
+[sympoies/nils-alfredworkflow](https://github.com/sympoies/nils-alfredworkflow)
+release assets after upstream `v*` tags publish standalone CLI tarballs.
+
+### Install
+
+```bash
+brew tap sympoies/tap
+brew install nils-alfred-cli
+```
+
+### Included binaries
+
+The upstream release manifest controls the installed binary list. Current
+bundle policy includes standalone-ready public/local/product CLIs such as
+`weather-cli`, `google-cli`, `memo-workflow-cli`, `workflow-cli`,
+`workflow-readme-cli`, `steam-cli`, `market-cli`, `epoch-cli`,
+`timezone-cli`, `randomer-cli`, `wiki-cli`, `quote-cli`, `bilibili-cli`, and
+`bangumi-cli`.
+
+The first generated formula appears after an upstream release dispatches
+`nils-alfred-cli-release`; until then this tap may only contain the update
+workflow.
 
 ## Install (script)
 
