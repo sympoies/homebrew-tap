@@ -151,7 +151,7 @@ release assets after upstream `v*` tags publish standalone CLI tarballs.
 
 ```bash
 brew tap sympoies/tap
-brew install nils-alfred-cli
+brew install sympoies/tap/nils-alfred-cli
 ```
 
 ### Included binaries
