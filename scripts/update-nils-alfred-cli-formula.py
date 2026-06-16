@@ -90,7 +90,10 @@ def render_formula(
     version: str,
     sha_by_target: dict[str, str],
 ) -> str:
-    return f'''class NilsAlfredCli < Formula
+    return f'''# frozen_string_literal: true
+
+# Standalone CLI bundle from nils-alfredworkflow.
+class NilsAlfredCli < Formula
   desc "Standalone CLI bundle from nils-alfredworkflow"
   homepage "https://github.com/{source_repo}"
   license "CC0-1.0"
@@ -123,7 +126,7 @@ def render_formula(
   test do
     system "#{{bin}}/weather-cli", "--help"
     system "#{{bin}}/workflow-readme-cli", "--help"
-    system "#{{bin}}/memo-workflow-cli", "--help"
+    system "#{{bin}}/randomer-cli", "--help"
   end
 end
 '''

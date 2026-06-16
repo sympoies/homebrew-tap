@@ -31,9 +31,12 @@ class NilsAlfredCliFormulaTests(unittest.TestCase):
             sha_by_target,
         )
 
+        self.assertIn("# frozen_string_literal: true", formula)
+        self.assertIn("# Standalone CLI bundle from nils-alfredworkflow.", formula)
         self.assertIn('system "#{bin}/weather-cli", "--help"', formula)
         self.assertIn('system "#{bin}/workflow-readme-cli", "--help"', formula)
-        self.assertIn('system "#{bin}/memo-workflow-cli", "--help"', formula)
+        self.assertIn('system "#{bin}/randomer-cli", "--help"', formula)
+        self.assertNotIn("memo-workflow-cli", formula)
         self.assertNotIn('"{bin}/weather-cli"', formula)
 
     def test_generated_formula_declares_upstream_license(self) -> None:
@@ -60,6 +63,17 @@ class NilsAlfredCliFormulaTests(unittest.TestCase):
         self.assertIn("github.rest.git.getRef", workflow)
         self.assertIn("ref: `heads/${branch}`", workflow)
         self.assertIn("headRef.data.object.sha", workflow)
+
+    def test_workflow_downloads_formula_after_homebrew_setup(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "update-nils-alfred-cli-formula.yml").read_text(
+            encoding="utf-8"
+        )
+
+        brew_test = workflow.split("  brew-test:", 1)[1].split("  commit:", 1)[0]
+        self.assertLess(
+            brew_test.index("- name: Set up Homebrew"),
+            brew_test.index("- name: Download updated formula"),
+        )
 
     def test_readme_uses_trust_free_install_command(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
