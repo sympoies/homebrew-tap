@@ -183,8 +183,14 @@ jobs:
               });
               currentSha = data.sha;
               if (Buffer.from(data.content, 'base64').equals(newContent)) {
-                core.info(`formula already current for v${version}`);
-                core.setOutput('commit_sha', data.sha);
+                const headRef = await github.rest.git.getRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `heads/${branch}`,
+                });
+                const commitSha = headRef.data.object.sha;
+                core.info(`formula already current for v${version} at ${commitSha}`);
+                core.setOutput('commit_sha', commitSha);
                 return;
               }
             } catch (error) {

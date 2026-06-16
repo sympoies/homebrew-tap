@@ -93,7 +93,7 @@ def render_formula(
     return f'''class NilsAlfredCli < Formula
   desc "Standalone CLI bundle from nils-alfredworkflow"
   homepage "https://github.com/{source_repo}"
-  license any_of: ["MIT", "Apache-2.0"]
+  license "CC0-1.0"
 
   on_macos do
     if Hardware::CPU.arm?
@@ -121,9 +121,9 @@ def render_formula(
   end
 
   test do
-    system "{{bin}}/weather-cli", "--help"
-    system "{{bin}}/workflow-readme-cli", "--help"
-    system "{{bin}}/memo-workflow-cli", "--help"
+    system "#{{bin}}/weather-cli", "--help"
+    system "#{{bin}}/workflow-readme-cli", "--help"
+    system "#{{bin}}/memo-workflow-cli", "--help"
   end
 end
 '''
