@@ -3,6 +3,8 @@ class NilsCli < Formula
   homepage "https://github.com/sympoies/nils-cli"
   license any_of: ["MIT", "Apache-2.0"]
 
+  depends_on "direnv"
+
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/sympoies/nils-cli/releases/download/v1.9.4/nils-cli-v1.9.4-aarch64-apple-darwin.tar.gz"
@@ -39,6 +41,10 @@ class NilsCli < Formula
     system "git", "init", testpath
     cd testpath do
       system "#{bin}/git-scope", "--help"
+      ENV["AGENT_RUN_FORMULA_TEST"] = nil
+      (testpath/".env").write("AGENT_RUN_FORMULA_TEST=ok\n")
+      system "#{bin}/agent-run", "exec", "--cwd", testpath, "--", "sh", "-c",
+             "test \"$AGENT_RUN_FORMULA_TEST\" = ok"
     end
   end
 end

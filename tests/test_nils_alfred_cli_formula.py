@@ -84,5 +84,22 @@ class NilsAlfredCliFormulaTests(unittest.TestCase):
         self.assertNotIn("brew install nils-alfred-cli", section)
 
 
+class NilsCliFormulaTests(unittest.TestCase):
+    def test_formula_installs_direnv_for_agent_run_env_files(self) -> None:
+        formula = (ROOT / "Formula" / "nils-cli.rb").read_text(encoding="utf-8")
+
+        self.assertIn('depends_on "direnv"', formula)
+
+    def test_formula_test_covers_agent_run_dotenv_path(self) -> None:
+        formula = (ROOT / "Formula" / "nils-cli.rb").read_text(encoding="utf-8")
+        test_block = formula.split("  test do", 1)[1].split("  end\nend", 1)[0]
+
+        self.assertIn('ENV["AGENT_RUN_FORMULA_TEST"] = nil', test_block)
+        self.assertIn('(testpath/".env").write("AGENT_RUN_FORMULA_TEST=ok\\n")', test_block)
+        self.assertIn('"#{bin}/agent-run"', test_block)
+        self.assertIn("AGENT_RUN_FORMULA_TEST", test_block)
+        self.assertIn("= ok", test_block)
+
+
 if __name__ == "__main__":
     unittest.main()
