@@ -2,10 +2,12 @@
 
 ## Formula overview
 
-| Formula | Description | Source git repo |
+| Package | Description | Source git repo |
 | --- | --- | --- |
 | `nils-cli` | Rust workspace of focused CLI binaries for API testing, Git operations, agent workflow evidence, provider automation, planning, and desktop/media utilities. | [sympoies/nils-cli](https://github.com/sympoies/nils-cli) |
 | `nils-alfred-cli` | Standalone CLI bundle extracted from nils-alfredworkflow for terminal use without Alfred. | [sympoies/nils-alfredworkflow](https://github.com/sympoies/nils-alfredworkflow) |
+| `symphony-board` | Thin macOS desktop client for a running Symphony Board server. | [sympoies/symphony-board](https://github.com/sympoies/symphony-board) |
+| `symphony-board-standalone` | Self-contained macOS desktop app with the bundled backend sidecar. | [sympoies/symphony-board](https://github.com/sympoies/symphony-board) |
 
 ## nils-cli
 
@@ -166,6 +168,45 @@ bundle policy includes standalone-ready public/local/product CLIs such as
 The first generated formula appears after an upstream release dispatches
 `nils-alfred-cli-release`; until then this tap may only contain the update
 workflow.
+
+## Symphony Board macOS apps
+
+The Symphony Board casks are generated from the unsigned macOS app zips attached
+to [sympoies/symphony-board](https://github.com/sympoies/symphony-board)
+releases. They are Apple Silicon only until upstream publishes Intel desktop
+assets.
+
+### Install
+
+```bash
+brew tap sympoies/tap
+brew install --cask sympoies/tap/symphony-board
+brew install --cask sympoies/tap/symphony-board-standalone
+```
+
+The app bundle names and release asset names stay aligned with upstream:
+
+- `symphony-board` installs `Symphony Board.app` from
+  `Symphony-Board-vX.Y.Z-macos-arm64-unsigned.zip`.
+- `symphony-board-standalone` installs `Symphony Board Standalone.app` from
+  `Symphony-Board-Standalone-vX.Y.Z-macos-arm64-unsigned.zip`.
+
+### Unsigned app caveat
+
+These casks intentionally do not bypass Gatekeeper in `postflight`. If macOS
+blocks launch after install, remove quarantine manually:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/Symphony Board.app"
+open "/Applications/Symphony Board.app"
+
+xattr -dr com.apple.quarantine "/Applications/Symphony Board Standalone.app"
+open "/Applications/Symphony Board Standalone.app"
+```
+
+Use `symphony-board` when you already have a running board server. Use
+`symphony-board-standalone` for a self-contained local app with its own app data
+directory.
 
 ## Install (script)
 

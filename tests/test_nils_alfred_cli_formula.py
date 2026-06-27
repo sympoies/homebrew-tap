@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import sys
 import unittest
 from pathlib import Path
 
@@ -14,8 +15,85 @@ def load_formula_updater():
     if spec is None or spec.loader is None:
         raise RuntimeError(f"failed to load {script}")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def load_symphony_board_cask_updater():
+    script = ROOT / "scripts" / "update-symphony-board-casks.py"
+    spec = importlib.util.spec_from_file_location("update_symphony_board_casks", script)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"failed to load {script}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+class SymphonyBoardCaskTests(unittest.TestCase):
+    def test_generated_casks_preserve_upstream_names_without_postflight(self) -> None:
+        module = load_symphony_board_cask_updater()
+        digest = "c" * 64
+
+        thin = module.render_cask(
+            "sympoies/symphony-board",
+            "1.2.3",
+            module.CASKS[0],
+            digest,
+        )
+        standalone = module.render_cask(
+            "sympoies/symphony-board",
+            "1.2.3",
+            module.CASKS[1],
+            digest,
+        )
+
+        self.assertIn('cask "symphony-board"', thin)
+        self.assertIn("Symphony-Board-v#{version}-macos-arm64-unsigned.zip", thin)
+        self.assertIn('app "Symphony Board.app"', thin)
+        self.assertIn("The thin client requires a running Symphony Board server.", thin)
+
+        self.assertIn('cask "symphony-board-standalone"', standalone)
+        self.assertIn("Symphony-Board-Standalone-v#{version}-macos-arm64-unsigned.zip", standalone)
+        self.assertIn('app "Symphony Board Standalone.app"', standalone)
+
+        for cask in (thin, standalone):
+            self.assertIn('depends_on arch: :arm64', cask)
+            self.assertIn("depends_on macos: :big_sur", cask)
+            self.assertIn("xattr -dr com.apple.quarantine", cask)
+            self.assertIn("caveats <<~EOS", cask)
+            self.assertNotIn("verified:", cask)
+            self.assertNotIn("postflight", cask)
+
+    def test_parse_sha256_sums_matches_release_asset_names(self) -> None:
+        module = load_symphony_board_cask_updater()
+        sums = module.parse_sha256_sums(
+            "a" * 64 + "  Symphony-Board-v1.2.3-macos-arm64-unsigned.zip\n"
+            + "b" * 64 + "  *Symphony-Board-Standalone-v1.2.3-macos-arm64-unsigned.zip\n"
+        )
+
+        self.assertEqual(sums["Symphony-Board-v1.2.3-macos-arm64-unsigned.zip"], "a" * 64)
+        self.assertEqual(
+            sums["Symphony-Board-Standalone-v1.2.3-macos-arm64-unsigned.zip"],
+            "b" * 64,
+        )
+
+    def test_workflow_updates_and_installs_both_casks_on_macos(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "update-symphony-board-casks.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("- symphony-board-release", workflow)
+        self.assertIn("python3 scripts/update-symphony-board-casks.py", workflow)
+        self.assertIn("Casks/symphony-board.rb", workflow)
+        self.assertIn("Casks/symphony-board-standalone.rb", workflow)
+        self.assertIn("runs-on: macos-latest", workflow)
+        self.assertIn("brew install --cask sympoies/tap/symphony-board", workflow)
+        self.assertIn("brew install --cask sympoies/tap/symphony-board-standalone", workflow)
+        self.assertIn("github.rest.git.createTree", workflow)
+        self.assertIn("github.rest.git.createCommit", workflow)
+        self.assertNotIn("createOrUpdateFileContents", workflow)
 
 
 class NilsAlfredCliFormulaTests(unittest.TestCase):
