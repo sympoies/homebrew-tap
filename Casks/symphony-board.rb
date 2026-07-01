@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 cask "symphony-board" do
-  version "1.12.7"
-  sha256 "6cee0704f49779ec7d1af944cd59b44ea8678d3e4b93fb364c6a0c0456bb0963"
+  version "1.12.8"
+  sha256 "6bb1c859071207d15edfaaba7cbb1794d95266b69eb4d387ec1d6f457c8bdb6c"
 
   url "https://github.com/sympoies/symphony-board/releases/download/v#{version}/Symphony-Board-v#{version}-macos-arm64-unsigned.zip"
   name "Symphony Board"
