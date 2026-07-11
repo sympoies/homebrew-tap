@@ -7,21 +7,21 @@ class NilsCli < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.16/nils-cli-v1.21.16-aarch64-apple-darwin.tar.gz"
-      sha256 "73dec1715f00cbfa8d7b9468274385e5348182224bb07f188c660330c2488b50"
+      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.17/nils-cli-v1.21.17-aarch64-apple-darwin.tar.gz"
+      sha256 "2270e9c38279b307f5a2bc57a0bfe0c2f8d2d7c724d10bc5285188cc6eb49599"
     else
-      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.16/nils-cli-v1.21.16-x86_64-apple-darwin.tar.gz"
-      sha256 "e5cfcee7d85a491149eed2b69e94c21c3fbc551084dfe12f6d3b95fdf219a696"
+      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.17/nils-cli-v1.21.17-x86_64-apple-darwin.tar.gz"
+      sha256 "d3175229a06b3ad1efd62ba66415299fa0b0cb8def206cd9f90ab48e641a26a8"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.16/nils-cli-v1.21.16-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "866c700468880e4625577d21d51e2fa5a6b4b212d4ea08b00854263ba8c2ff29"
+      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.17/nils-cli-v1.21.17-aarch64-unknown-linux-gnu.tar.gz"
+      sha256 "e54888ad30b27f5006c2c473344c182947b964e486c6eb2f9a57edb57fb5b8db"
     else
-      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.16/nils-cli-v1.21.16-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "94dfb0cc8fa1f8bee07e38d2b2c315e837ac4701a630def6b6a943ac5b3604f2"
+      url "https://github.com/sympoies/nils-cli/releases/download/v1.21.17/nils-cli-v1.21.17-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "20aa61952f4fad44719faa700418d8c72176b5ca5c0013c4bcef990b4c6efabc"
     end
   end
 
