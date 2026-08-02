@@ -60,7 +60,7 @@ Aligned with the upstream surface map, limited to the binaries this formula ship
 
 #### Agent policy and evidence
 
-- `agent-runtime` — Render / install / doctor / audit-drift for graysurf/agent-runtime-kit, plus runtime-state maintenance, skill listing, and PR/MR body rendering.
+- `agent-runtime` — Render / install / doctor / audit-drift for sympoies/agent-runtime-kit, plus runtime-state maintenance, skill listing, and PR/MR body rendering.
 - `agent-docs` — Deterministic policy-document resolver for agent workflows (`resolve`, `contexts`, `add`, `baseline`).
 - `agent-out` — Generate and audit canonical `AGENT_HOME/out` artifact paths.
 - `agent-scope-lock` — Create and validate deterministic agent edit-scope locks.
