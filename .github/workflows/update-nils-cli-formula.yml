@@ -16,6 +16,10 @@ on:
         required: false
         default: sympoies/nils-cli
         type: string
+      expected_workflow_sha:
+        description: Exact tap main SHA approved by the recovery broker
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -33,6 +37,16 @@ jobs:
       tag: ${{ steps.meta.outputs.tag }}
       source_repo: ${{ steps.meta.outputs.source_repo }}
     steps:
+      - name: Verify recovery workflow revision
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          EXPECTED_WORKFLOW_SHA: ${{ inputs.expected_workflow_sha }}
+        run: |
+          set -euo pipefail
+          [[ "${EXPECTED_WORKFLOW_SHA}" =~ ^[0-9a-f]{40}$ ]]
+          [[ "${GITHUB_SHA}" == "${EXPECTED_WORKFLOW_SHA}" ]]
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -172,6 +186,12 @@ jobs:
             const version = process.env.VERSION;
 
             const newContent = fs.readFileSync(path);
+            const { data: branchCommit } = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: branch,
+            });
+            const branchHead = branchCommit.sha;
 
             // Current file on the branch: its blob sha is required to update, and
             // lets us skip a no-op commit when the formula is already current.
@@ -181,12 +201,12 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 path,
-                ref: branch,
+                ref: branchHead,
               });
               currentSha = data.sha;
               if (Buffer.from(data.content, 'base64').equals(newContent)) {
                 core.info(`formula already current for v${version}`);
-                core.setOutput('commit_sha', data.sha);
+                core.setOutput('commit_sha', branchHead);
                 return;
               }
             } catch (error) {
