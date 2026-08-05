@@ -1,5 +1,12 @@
 name: Update nils-cli Formula
-run-name: Update nils-cli ${{ github.event.client_payload.tag || inputs.version }}
+# Both trigger paths render the same field, so the run list reads uniformly:
+# `client_payload.tag` is v-prefixed while `inputs.version` is not, which used to
+# make a run's title depend on which event started it. Exact normalization is not
+# possible here — `run-name` is evaluated before any job runs, so it cannot use
+# the `prepare` job's normalized output — and `inputs.version` accepts a leading
+# `v`, so a caller can still produce one. Treat this as a display convention, not
+# a contract: consumers should read the version from the published formula.
+run-name: Update nils-cli ${{ github.event.client_payload.version || inputs.version }}
 
 on:
   repository_dispatch:
