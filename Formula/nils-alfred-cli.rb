@@ -8,21 +8,21 @@ class NilsAlfredCli < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.1/nils-alfred-cli-v1.6.1-aarch64-apple-darwin.tar.gz"
-      sha256 "b287f54e9f33539f8a2282bf79591cc2e434ee4ca565f5440507acbd923c3f66"
+      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.2/nils-alfred-cli-v1.6.2-aarch64-apple-darwin.tar.gz"
+      sha256 "709cffd943978961a3552b3a0021218a362e046d57b46970516152b2b9bebf17"
     else
-      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.1/nils-alfred-cli-v1.6.1-x86_64-apple-darwin.tar.gz"
-      sha256 "53ce2e727488df13010a0d48c9b5b8694014cd066c5feda0df61bbed8ef88a01"
+      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.2/nils-alfred-cli-v1.6.2-x86_64-apple-darwin.tar.gz"
+      sha256 "ad6994d8b64f8bdf9627bb72970ff7bff58e7dbbe7e010f39f8580a3212c80a0"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.1/nils-alfred-cli-v1.6.1-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "192e33a2ec19fcaee973abeb197a022f8e9d3e3fff5696a5d97d9b7496900936"
+      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.2/nils-alfred-cli-v1.6.2-aarch64-unknown-linux-gnu.tar.gz"
+      sha256 "3805b6d3f9cded6941ee1d7d828a68576fe98cee9622db0ff700bcbcc09e9196"
     else
-      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.1/nils-alfred-cli-v1.6.1-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "af7394bce0d5b3f160321772a618af1c8b0f5e3ea82a319ccdf713fd97f2982c"
+      url "https://github.com/sympoies/nils-alfredworkflow/releases/download/v1.6.2/nils-alfred-cli-v1.6.2-x86_64-unknown-linux-gnu.tar.gz"
+      sha256 "89bda6ff886e5fab8ed93e6ea40319d1cb7ebd1778439f5c9acf50ac9ec4899f"
     end
   end
 
