@@ -20,20 +20,33 @@ later.
 ## Install
 
 [Install Homebrew](https://brew.sh/) first, then add this tap and install the
-packages you want:
+package you want:
 
 ```bash
 brew tap sympoies/tap
-brew install nils-cli
-brew install nils-alfred-cli
 ```
 
-For Symphony Board, choose the client if you already run a server, or the
-standalone app if you want the bundled backend:
+For `nils-cli`:
+
+```bash
+brew install sympoies/tap/nils-cli
+```
+
+For `nils-alfred-cli`:
+
+```bash
+brew install sympoies/tap/nils-alfred-cli
+```
+
+For Symphony Board, install the client if you already run a server:
 
 ```bash
 brew install --cask sympoies/tap/symphony-board
-# Or:
+```
+
+Or install the standalone app if you want the bundled backend:
+
+```bash
 brew install --cask sympoies/tap/symphony-board-standalone
 ```
 
@@ -59,10 +72,27 @@ also installs Zsh and Bash completions and optional shell aliases.
 
 ## Upgrade
 
+Run the command for the package you installed. For `nils-cli`:
+
 ```bash
-brew upgrade nils-cli nils-alfred-cli
+brew upgrade sympoies/tap/nils-cli
+```
+
+For `nils-alfred-cli`:
+
+```bash
+brew upgrade sympoies/tap/nils-alfred-cli
+```
+
+For the Symphony Board client:
+
+```bash
 brew upgrade --cask sympoies/tap/symphony-board
-# Or, if you installed the standalone app:
+```
+
+For the standalone app:
+
+```bash
 brew upgrade --cask sympoies/tap/symphony-board-standalone
 ```
 
