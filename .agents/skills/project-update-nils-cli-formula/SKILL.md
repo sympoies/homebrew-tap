@@ -1,12 +1,12 @@
 ---
-name: project-release-nils-cli
-description: Release Homebrew formula nils-cli by dispatching the tap's GitHub Actions release workflow.
+name: project-update-nils-cli-formula
+description: Update the nils-cli Homebrew formula by manually dispatching the tap's formula-update workflow.
 ---
 
-# Homebrew Tap Release Nils Cli
+# Homebrew Tap Update Nils Cli Formula
 
-Manually publish a `nils-cli` version to this Homebrew tap by dispatching the
-release workflow `.github/workflows/update-nils-cli-formula.yml`.
+Manually update the `nils-cli` formula in this Homebrew tap to a published version by dispatching the
+formula-update workflow `.github/workflows/update-nils-cli-formula.yml`. This skill does not own the nils-cli release itself (tagging and publishing happen upstream).
 
 > The normal release path is automatic: the `nils-cli` release pipeline sends a
 > `repository_dispatch` (`nils-cli-release`) to this tap, which runs the same
@@ -56,7 +56,7 @@ Failure modes:
 
 ## Scripts (only entrypoints)
 
-- `<PROJECT_ROOT>/.agents/skills/project-release-nils-cli/scripts/project-release-nils-cli.sh`
+- `<PROJECT_ROOT>/.agents/skills/project-update-nils-cli-formula/scripts/project-update-nils-cli-formula.sh`
 
 ## Workflow
 
