@@ -10,7 +10,7 @@ cask "symphony-board-standalone" do
   homepage "https://github.com/sympoies/symphony-board"
 
   depends_on arch: :arm64
-  depends_on macos: :big_sur
+  depends_on :macos
 
   app "Symphony Board Standalone.app"
 
