@@ -1,8 +1,7 @@
 # DEVELOPMENT.md
 
 Contributor guide for maintaining the tap. Repository-wide ownership and
-safety rules live in [`AGENTS.md`](AGENTS.md); [`CLAUDE.md`](CLAUDE.md)
-imports the same policy for Claude Code.
+safety rules live in [`AGENTS.md`](AGENTS.md).
 
 ## Setup
 
