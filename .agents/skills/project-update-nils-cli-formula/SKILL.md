@@ -1,68 +1,32 @@
 ---
 name: project-update-nils-cli-formula
-description: Update the nils-cli Homebrew formula by manually dispatching the tap's formula-update workflow.
+description: Recover a missed or failed nils-cli formula update in this tap through the sympoies-infra release broker; the tap workflow is not dispatched by hand.
 ---
 
 # Homebrew Tap Update Nils Cli Formula
 
-Manually update the `nils-cli` formula in this Homebrew tap to a published version by dispatching the
-formula-update workflow `.github/workflows/update-nils-cli-formula.yml`. This skill does not own the nils-cli release itself (tagging and publishing happen upstream).
+The `nils-cli` formula is updated by `.github/workflows/update-nils-cli-formula.yml`.
 
-> The normal release path is automatic: the `nils-cli` release pipeline sends a
-> `repository_dispatch` (`nils-cli-release`) to this tap, which runs the same
-> workflow. Use this skill only to manually (re)publish a specific version — for
-> example a backfill, or a re-run after a transient failure.
+- Normal path: the nils-cli release sends a `nils-cli-release`
+  `repository_dispatch` to this tap and the workflow rewrites
+  `Formula/nils-cli.rb`, runs `brew test`, commits the bump, and creates the
+  tap release. Nothing to do by hand.
+- Recovery path (missed or failed tap update for an existing public tag): the
+  private release broker is the supported owner. Use the
+  `project-release-nils-cli` skill in `serenvia/sympoies-infra` with
+  `--mode deploy-only --version X.Y.Z`; its bounded exact-run tap recovery
+  dispatches this workflow.
 
-## Contract
+## Why not dispatch by hand
 
-Prereqs:
+The workflow's manual `workflow_dispatch` requires `expected_workflow_sha`, the
+exact tap `main` commit inspected by the broker. The workflow compares it with
+`GITHUB_SHA` before checkout so a branch race stops before formula generation or
+any repository write. Do not run `gh workflow run update-nils-cli-formula.yml`
+with a self-chosen SHA; that bypasses the broker's inspection and the guard it
+exists to enforce.
 
-- Run inside this `homebrew-tap` git work tree (`gh` resolves the repo from the
-  remote).
-- `gh` available on `PATH` and authenticated with Actions (workflow) write scope.
+## Changing the workflow
 
-Inputs:
-
-- Required:
-  - `--version <X.Y.Z|vX.Y.Z>` — `nils-cli` version to publish (leading `v`
-    optional).
-- Optional:
-  - `--source-repo <OWNER/REPO>` — source repo holding the release artifacts
-    (default: workflow default, `sympoies/nils-cli`).
-  - `--ref <ref>` — branch/ref to run the workflow on (default: `main`).
-  - `--watch` — stream the dispatched run to completion after triggering.
-  - `--dry-run` — print the `gh` command without dispatching.
-
-Outputs:
-
-- Dispatches `update-nils-cli-formula.yml`, which rewrites `Formula/nils-cli.rb`
-  from the published release artifacts, runs `brew test` on macOS + Linux,
-  commits the bump via the GitHub Contents API (web-flow signed, satisfying the
-  `required_signatures` ruleset on `main`), and creates the `nils-cli-v<version>`
-  tap release.
-
-Exit codes:
-
-- `0`: success
-- `1`: failure (missing `gh`, run outside the tap work tree, or dispatch failure)
-- `2`: usage error (missing/invalid `--version` or `--source-repo`)
-
-Failure modes:
-
-- Missing `gh`, or running outside the tap work tree.
-- Invalid `--version` / `--source-repo`.
-- Source release artifacts not yet published — the dispatched workflow fails
-  while fetching the `.sha256` sidecars; re-run once the release is ready.
-
-## Scripts (only entrypoints)
-
-- `<PROJECT_ROOT>/.agents/skills/project-update-nils-cli-formula/scripts/project-update-nils-cli-formula.sh`
-
-## Workflow
-
-1. Run the wrapper entrypoint with `--version` (optionally `--source-repo`,
-   `--ref`, `--watch`).
-2. The wrapper runs `gh workflow run update-nils-cli-formula.yml --ref <ref>
-   -f version=<X.Y.Z> [-f source_repo=<OWNER/REPO>]`.
-3. GitHub Actions updates the formula, runs `brew test`, commits the bump, and
-   publishes the tap release.
+Follow `DEVELOPMENT.md` (formula style, `brew test`) and keep the
+`expected_workflow_sha` guard intact.
