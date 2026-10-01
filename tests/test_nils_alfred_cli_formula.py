@@ -60,7 +60,9 @@ class SymphonyBoardCaskTests(unittest.TestCase):
 
         for cask in (thin, standalone):
             self.assertIn('depends_on arch: :arm64', cask)
-            self.assertIn("depends_on macos: :big_sur", cask)
+            # Homebrew now treats Big Sur as the floor; naming it is a style offense (OSDependsOn).
+            self.assertIn("depends_on :macos", cask)
+            self.assertNotIn("depends_on macos:", cask)
             self.assertIn("xattr -dr com.apple.quarantine", cask)
             self.assertIn("caveats <<~EOS", cask)
             self.assertNotIn("verified:", cask)
