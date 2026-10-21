@@ -9,9 +9,6 @@ class NilsCli < Formula
     if Hardware::CPU.arm?
       url "https://github.com/sympoies/nils-cli/releases/download/v1.36.20/nils-cli-v1.36.20-aarch64-apple-darwin.tar.gz"
       sha256 "1fea8cb58c35b7246ae0968d5544a522e3f63585824b5fe74efa5297bd6f9f27"
-    else
-      url "https://github.com/sympoies/nils-cli/releases/download/v1.36.20/nils-cli-v1.36.20-x86_64-apple-darwin.tar.gz"
-      sha256 "5d261170e481aae8e1a21184fe741703060f0b8f2ea073e5a301e11e8ecbc3b7"
     end
   end
 
