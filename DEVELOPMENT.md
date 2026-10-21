@@ -59,6 +59,20 @@ HOMEBREW_NO_AUTO_UPDATE=1 brew reinstall "$formula" || HOMEBREW_NO_AUTO_UPDATE=1
 HOMEBREW_NO_AUTO_UPDATE=1 brew test "$formula"
 ```
 
+## Supported nils-cli releases
+
+The updater requests exactly three checksum sidecars: Linux x86_64/aarch64
+and macOS aarch64. Existing four-target releases remain usable because their
+Intel macOS asset is ignored. The formula retains the guarded ARM macOS branch
+and both Linux branches. Land this updater/formula change before the upstream
+release matrix drops Intel macOS; do not cancel an in-flight release.
+
+Run the hermetic updater fixtures with:
+
+```bash
+python3 -B -m unittest discover -s tests -p 'test_nils_cli*.py'
+```
+
 ## Notes
 
 - CI reference: `.github/workflows/brew-test.yml`
