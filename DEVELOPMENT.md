@@ -73,6 +73,19 @@ Run the hermetic updater fixtures with:
 python3 -B -m unittest discover -s tests -p 'test_nils_cli*.py'
 ```
 
+## Formula update recovery
+
+The normal `nils-cli-release` repository dispatch runs
+`.github/workflows/update-nils-cli-formula.yml`, which generates the formula,
+runs `brew test`, commits the bump, and creates the tap release.
+
+For a missed or failed update of an existing public tag, use the private release
+broker's bounded recovery in `deploy-only` mode with the exact version. Follow
+the broker owner's release-operations runbook. Do not dispatch the tap updater
+by hand or choose `expected_workflow_sha` yourself: the broker must inspect the
+exact tap main commit before dispatch, and the workflow must compare it with
+`GITHUB_SHA` before checkout or any repository write.
+
 ## Notes
 
 - CI reference: `.github/workflows/brew-test.yml`
